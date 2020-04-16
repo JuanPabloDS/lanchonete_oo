@@ -2,10 +2,10 @@
 <?php include './layout/menu.php'; ?>
 <?php 
 
-require 'classes/Categoria.php';
-require 'classes/CategoriaDAO.php';
-$categoriaDAO = new CategoriaDAO();
-$categorias = $categoriaDAO->listar();
+require 'classes/Produto.php';
+require 'classes/ProdutoDAO.php';
+$ProdutoDAO = new ProdutoDAO();
+$produtos = $produtoDAO->listar();
 
 ?>
 <?php 
@@ -15,10 +15,10 @@ $categorias = $categoriaDAO->listar();
 ?>
 <div class="row" style="margin-top:40px">
 	<div class="col-10">
-		<h2>Gerencias categorias</h2>
+		<h2>Gerencias Produtos</h2>
 	</div>
 	<div class="col-2">
-		<a href="form_categoria.php" class="btn btn-success">Nova</a>
+		<a href="form_produto.php" class="btn btn-success">Novo</a>
 	</div>
 </div>
 <div class="row">
@@ -31,13 +31,13 @@ $categorias = $categoriaDAO->listar();
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach($categorias as $categoria){ ?>
+			<?php foreach($produtos as $produto){ ?>
 			<tr>
-				<td><?= $categoria->getId() ?></td>
+				<td><?= $produto->getId() ?></td>
 				<td><?= $categoria->getNome() ?></td>
 				<td>
-					<a href="form_categoria.php?id=<?= $categoria->getId() ?>">Editar</a> | 
-					<a href="controle_categoria.php?acao=deletar&id=<?= $categoria->getId() ?>" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+					<a href="form_produto.php?id=<?= $produto->getId() ?>">Editar</a> | 
+					<a href="controle_produto.php?acao=deletar&id=<?= $produto->getId() ?>" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
 				</td>
 			</tr>
 			<?php } ?>
@@ -45,4 +45,4 @@ $categorias = $categoriaDAO->listar();
 	</table>
 </div>
 
-<?php include './layout/footer.php'; ?>s
+<?php include './layout/footer.php'; ?>
