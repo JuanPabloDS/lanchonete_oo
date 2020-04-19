@@ -2,9 +2,13 @@
 <?php include './layout/menu.php'; ?>
 <?php 
 
+require 'classes/Categoria.php';
 require 'classes/Produto.php';
+require 'classes/CategoriaDAO.php';
 require 'classes/ProdutoDAO.php';
-$ProdutoDAO = new ProdutoDAO();
+
+$produtoDAO = new ProdutoDAO();
+$categoriaDAO = new CategoriaDAO();
 $produtos = $produtoDAO->listar();
 
 ?>
@@ -15,7 +19,7 @@ $produtos = $produtoDAO->listar();
 ?>
 <div class="row" style="margin-top:40px">
 	<div class="col-10">
-		<h2>Gerencias Produtos</h2>
+		<h2>Gerenciar produtos</h2>
 	</div>
 	<div class="col-2">
 		<a href="form_produto.php" class="btn btn-success">Novo</a>
@@ -27,13 +31,19 @@ $produtos = $produtoDAO->listar();
 			<tr>
 				<th>#ID</th>
 				<th>Nome</th>
+				<th>Preço</th>
+				<th>Categoria</th>
 				<th>Ações</th>
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach($produtos as $produto){ ?>
+			<?php foreach($produtos as $produto){ 
+				$categoria = $categoriaDAO->get($produto->getCategoria()); 
+			?>
 			<tr>
 				<td><?= $produto->getId() ?></td>
+				<td><?= $produto->getNome() ?></td>
+				<td>R$ <?= $produto->getPreco() ?></td>
 				<td><?= $categoria->getNome() ?></td>
 				<td>
 					<a href="form_produto.php?id=<?= $produto->getId() ?>">Editar</a> | 

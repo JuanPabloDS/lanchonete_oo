@@ -2,7 +2,7 @@
 <?php include './layout/menu.php'; ?>
 <?php 
 	require 'classes/Categoria.php'; 
-	require 'classes/CategoriaDAO.php';
+	require_once 'classes/CategoriaDAO.php';
 	$categoria = new Categoria();
 	if(isset($_GET['id']) && $_GET['id'] != '') {
 		$id = $_GET['id'];

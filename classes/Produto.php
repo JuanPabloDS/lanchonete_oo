@@ -2,10 +2,10 @@
 
 class Produto 
 {
-	private $id;
-	private $nome;
-	private $preco;
-	private $categoria;
+    private $id;
+    private $nome;
+    private $preco;
+    private $categoria;
 
     /**
      * @return mixed
@@ -51,6 +51,14 @@ class Produto
      */
     public function getPreco()
     {
+        return number_format($this->preco, 2, ',','.');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrecoBD()
+    {
         return $this->preco;
     }
 
@@ -61,6 +69,9 @@ class Produto
      */
     public function setPreco($preco)
     {
+        $preco = str_replace('.', '', $preco);
+        $preco = str_replace(',', '.', $preco);
+
         $this->preco = $preco;
 
         return $this;
