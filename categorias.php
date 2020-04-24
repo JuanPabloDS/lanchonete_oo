@@ -7,6 +7,14 @@ require 'classes/CategoriaDAO.php';
 $categoriaDAO = new CategoriaDAO();
 $categorias = $categoriaDAO->listar();
 
+
+if(isset($_GET['pesquisa']) && $_GET['pesquisa'] != '') {
+	$categorias = $categoriaDAO->listar($_GET['pesquisa']);
+} else {
+	$categorias = $categoriaDAO->listar();
+}
+
+
 ?>
 <?php 
 	if(isset($_GET['msg']) && $_GET['msg'] != '') {
@@ -14,8 +22,19 @@ $categorias = $categoriaDAO->listar();
 	}
 ?>
 <div class="row" style="margin-top:40px">
-	<div class="col-10">
+	<div class="col-6">
 		<h2>Gerencias categorias</h2>
+	</div>
+	<div class="col-4">
+	<form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" name="pesquisa" type="search" placeholder="Pesquisar" aria-label="Pesquisar" value="<?= (isset($_GET['pesquisa']) ? $_GET['pesquisa'] : '') ?>">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      	<i class="fas fa-search"></i>	
+      </button>
+      <a href="./produtos.php" class="btn btn-outline-warning my-2 my-sm-0">
+      	<i class="fas fa-trash-alt"></i>
+      </a>
+    </form>
 	</div>
 	<div class="col-2">
 		<a href="form_categoria.php" class="btn btn-success">Nova</a>
@@ -36,8 +55,12 @@ $categorias = $categoriaDAO->listar();
 				<td><?= $categoria->getId() ?></td>
 				<td><?= $categoria->getNome() ?></td>
 				<td>
-					<a href="form_categoria.php?id=<?= $categoria->getId() ?>">Editar</a> | 
-					<a href="controle_categoria.php?acao=deletar&id=<?= $categoria->getId() ?>" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+					<a href="form_categoria.php?id=<?= $categoria->getId() ?>" class="btn btn-warning">
+						<i class="fas fa-edit"></i>
+					</a>
+					<a href="controle_categoria.php?acao=deletar&id=<?= $categoria->getId() ?>" onclick="return confirm('Deseja realmente excluir?')"class="btn btn-danger">
+						<i class="fas fa-trash-alt"></i>
+					</a>
 				</td>
 			</tr>
 			<?php } ?>
@@ -45,4 +68,4 @@ $categorias = $categoriaDAO->listar();
 	</table>
 </div>
 
-<?php include './layout/footer.php'; ?>s
+<?php include './layout/footer.php'; ?>

@@ -10,7 +10,7 @@ class Conexao
 	public function __construct() {
 		$this->host = 'mysql:host=localhost;dbname=lanchonete_api';
 		$this->user = 'root';
-		$this->password = 'JuanPablo';
+		$this->password = 'root';
 	}
 
     public function conectar() {
