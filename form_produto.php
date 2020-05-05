@@ -1,6 +1,10 @@
 <?php include './layout/header.php'; ?>
 <?php include './layout/menu.php'; ?>
-<?php 
+<?php
+	$permissoes = retornaControle('produto');
+	if(empty($permissoes)) {
+		header("Location: adminstrativa.php?msg=Acesso negado.");
+	}
 	require 'classes/Categoria.php';
 	require 'classes/CategoriaDAO.php';
 	require 'classes/Imagem.php';
@@ -82,9 +86,11 @@
 					</div>
 				</div>
 			</div>
+			<?php if(($permissoes['insert'] && $produto->getId() == '') || ($permissoes['update'] && $produto->getId() != '')): ?>
 			<div class="form-group">
-				<button type="submit" class="btn btn-primary">Salvar</button>
+				<button type="submit" class="btn btn-primary w-100">Salvar</button>
 			</div>
+			<?php endif; ?>
 		</form>
 	</div>
 
@@ -92,6 +98,12 @@
 		<div class="col-6">
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
+		<?php 
+			$permissoesImagens = retornaControle('imagensProduto');
+
+			if(!empty($permissoesImagens)): 
+		?>
+			
 			<div class="card">
 				<div class="card-header">
 					Imagens
@@ -105,19 +117,54 @@
 						</div>
 						<br>
 						<br>
-						<button type="submit" class="btn btn-primary w-100">Cadastrar imagens</button>
+						<button type="submit" class="btn btn-info w-100">Cadastrar imagens</button>
 					</form>
 				</div>
 			</div>
+			<?php endif; ?>
 			<div class="card">
 				<div class="card-header">
 					Imagens cadastradas
 				</div>
-				<div class="card-body">
-					<?php foreach($imagens as $imagem): ?>
-						<img src="<?= $imagem->getCaminho(); ?>" class="img-thumbnail" width="150px">
-					<?php endforeach; ?>
-				</div>
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+                  <!-- Indicators -->
+                  <ol class="carousel-indicators">
+                     <?php foreach($imagens as $indice => $img): ?>
+                     <?php if($indice == 0): ?>
+                        <li data-target="#myCarousel" data-slide-to=<?php echo $indice?> class="active"/>
+                     <?php else: ?>
+                        <li data-target="#myCarousel" data-slide-to=<?php echo $indice?> />
+                     <?php endif; ?>
+                     <?php endforeach; ?>
+                  </ol>
+                  <!-- Wrapper for slides -->
+
+                  <div class="carousel-inner">
+                     <?php foreach($imagens as $indice => $img): ?>
+                     <?php if($indice == 0): ?>
+                        <div class="item active">
+                           <img src="<?= $img->getCaminho(); ?>" style="width:100%;">
+                        </div>
+                        <?php else: ?>
+                           <div class="item">
+                              <img src="<?= $iimg->getCaminho(); ?>" style="width:100%;">
+                           </div>
+                     <?php endif; ?>
+                     <?php endforeach; ?>
+                  </div>
+
+                  <!-- Left and right controls -->
+                  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                  <span class="glyphicon glyphicon-chevron-left"></span>
+                  <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  <span class="sr-only">Next</span>
+                  </a>
+               </div>
+				
 			</div>
 		</div>
 	<?php endif; ?>

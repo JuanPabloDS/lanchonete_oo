@@ -14,9 +14,10 @@ class ClienteDAO extends Model
     	$values = "null,
 				   '{$cliente->getNome()}',
 				   '{$cliente->getCpf()}',
-				   '{$cliente->getDtNascimento()}',
+				   '{$cliente->getDtNascimentoBD()}',
 				   '{$cliente->getSexo()}',
 				   '{$cliente->getEmail()}',
+				   '{$cliente->getSenha()}',
 				   '{$cliente->getCelular()}',
 				   '{$cliente->getCep()}',
 				   '{$cliente->getLogradouro()}',
@@ -27,14 +28,16 @@ class ClienteDAO extends Model
 				   '{$cliente->getEstado()}',
 				   '{$cliente->getImagem()}'
     				";
-
-    	return $this->insert($values);
+    	return $this->inserir($values);
     }
     public function alteraCliente(Cliente $cliente)
     {
+    	$altera_senha = ($cliente->getSenha() != '' ? ", senha = '{$cliente->getSenha()}'" : '');
+        $altera_imagem = ($cliente->getImagem() != '' ? ", imagem = '{$cliente->getImagem()}'" : '');
+
     	$values = "nome = '{$cliente->getNome()}',
 				   cpf = '{$cliente->getCpf()}',
-				   dt_nascimento = '{$cliente->getDtNascimento()}',
+				   dt_nascimento = '{$cliente->getDtNascimentoBD()}',
 				   sexo = '{$cliente->getSexo()}',
 				   email = '{$cliente->getEmail()}',
 				   celular = '{$cliente->getCelular()}',
@@ -44,23 +47,26 @@ class ClienteDAO extends Model
 				   numero = '{$cliente->getNumero()}',
 				   bairro = '{$cliente->getBairro()}',
 				   cidade = '{$cliente->getCidade()}',
-				   estado = '{$cliente->getEstado()}',
-				   imagem = '{$cliente->getImagem()}'
+				   estado = '{$cliente->getEstado()}'
+				   {$altera_imagem}
+					{$altera_senha}
     				";
     	$this->alterar($cliente->getId(), $values);
     }
-     public function listar($pesquisa = '')
+
+    public function listar($pesquisa = '')
     {
-        if($pesquisa != '') {
-            $sql = "SELECT * FROM {$this->tabela} 
-                    WHERE nome like '%{$pesquisa}%'
-                        OR email like '%{$pesquisa}%'";
-        } else {
-            $sql = "SELECT * FROM {$this->tabela}";
-        }
-        $stmt = $this->db->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, $this->class);
-        $stmt->execute();
-        return $stmt->fetchAll();
+    	if($pesquisa != '') {
+    		$sql = "SELECT * FROM {$this->tabela}
+    				WHERE nome LIKE '%{$pesquisa}%'
+    					OR email LIKE '%{$pesquisa}%'
+    					OR cpf LIKE '%{$pesquisa}%'";
+    	} else {
+    		$sql = "SELECT * FROM {$this->tabela}";
+    	}
+    	$stmt = $this->db->prepare($sql);
+    	$stmt->setFetchMode(PDO::FETCH_CLASS, $this->class);
+    	$stmt->execute();
+    	return $stmt->fetchAll();
     }
 }
